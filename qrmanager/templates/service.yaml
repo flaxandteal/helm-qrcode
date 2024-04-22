@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.deployment.name }}-service
+spec:
+  type: {{ .Values.deployment.service.type }}
+  selector:
+    app: {{ .Values.deployment.name }}
+  ports:
+    - protocol: TCP
+      port: {{ .Values.deployment.service.port }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.deployment.name }}-db-service
+spec:
+  type: {{ .Values.statefulset.service.type }}
+  selector:
+    app: {{ .Values.deployment.name }}-db
+  ports:
+    - protocol: TCP
+      port: {{ .Values.statefulset.service.port}}
