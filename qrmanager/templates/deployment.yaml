@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.deployment.name }}
+  labels:
+    app: {{ .Values.deployment.name }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ .Values.deployment.name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.deployment.name }}
+    spec:
+      initContainers:
+      - name: "init-{{ .Values.deployment.name }}"
+        image: "{{ .Values.deployment.image.repository }}:{{ .Values.deployment.image.tag }}"
+        command: ["/bin/sh", "-c"]
+        args: ["mkdir /data/saved_qr /data/config; ls -l /data/config; ls -l /data/saved_qr; if [ ! -f /data/config/config.php ]; then cp /var/www/html/config/* /data/config/; fi"]
+        volumeMounts:
+        - name: {{ .Values.deployment.name }}-data
+          mountPath: /data
+      containers:
+      - name: {{ .Values.deployment.name }}
+        image: "{{ .Values.deployment.image.repository }}:{{ .Values.deployment.image.tag}}"
+        ports:
+        - containerPort: 80
+        env: 
+        {{- range .Values.env }}
+        {{- if .value }}
+        - name: {{ .name }}
+          value: {{ .value | quote }}
+        {{- end }}
+        {{- if .valueFrom }}
+        - name: {{ .name }}
+          valueFrom:
+            secretKeyRef:
+              name: {{ .valueFrom.secretKeyRef.name }}
+              key: {{ .valueFrom.secretKeyRef.key }}
+        {{- end }}
+        {{- end }}
+        volumeMounts:
+        - name: {{ .Values.deployment.name }}-data
+          mountPath: /var/www/html/config
+          subPath: config
+        - name: {{ .Values.deployment.name }}-data
+          mountPath: /var/www/html/saved_qrcode
+          subPath: saved_qr
+      volumes:
+      - name: {{ .Values.deployment.name }}-data
+        persistentVolumeClaim:
+          claimName: {{ .Values.deployment.name }}-data-pvc

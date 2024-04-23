@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ .Values.deployment.name }}-db
+spec:
+  serviceName: {{ .Values.deployment.name }}-db-service
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ .Values.deployment.name }}-db
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.deployment.name }}-db
+    spec:
+      containers:
+      - name: {{ .Values.deployment.name }}-db
+        image: "{{ .Values.statefulset.image.repository }}:{{ .Values.statefulset.image.tag}}"
+        ports:
+        - containerPort: 3306
+        env: 
+        {{- range .Values.statefulset.env }}
+        - name: {{ .name }}
+        {{- if .value }}
+          value: {{ .value | quote }}
+        {{- else if .valueFrom }}
+          valueFrom:
+            secretKeyRef:
+              name: {{ .valueFrom.secretKeyRef.name }}
+              key: {{ .valueFrom.secretKeyRef.key }}
+        {{- end }}
+        {{- end }}
+        volumeMounts:
+        - name: {{ .Values.deployment.name }}-db-data
+          mountPath: /var/lib/mysql
+  volumeClaimTemplates:
+  - metadata:
+      name: {{ .Values.deployment.name }}-db-data
+    spec:
+      accessModes: ["ReadWriteOnce"]
+      resources:
+        requests:
+          storage: {{ .Values.statefulset.storage }}
