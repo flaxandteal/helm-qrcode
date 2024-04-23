@@ -9,6 +9,6 @@ entries:
     name: qrmanager
     type: application
     urls:
-    - https://flaxandteal.github.io/helm-qrcode/qrmanager-0.1.0.tgz
+    - https://flaxandteal.github.io/helm-qrcode/qrmanager-0.1.2.tgz
     version: 0.1.0
 generated: "2024-04-23T17:30:19.20983393+03:00"
