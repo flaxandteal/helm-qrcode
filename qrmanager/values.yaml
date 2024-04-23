@@ -59,7 +59,7 @@ ingress:
   className: "nginx"
   annotations:
     cert-manager.io/cluster-issuer: letsencrypt-production
-    kubernetes.io/ingress.class: nginx
+    # kubernetes.io/ingress.class: nginx cannot set both classname and annotation class name
     meta.helm.sh/release-name: php-dynamic-qrcode
     meta.helm.sh/release-namespace: srv-qr
   labels:
