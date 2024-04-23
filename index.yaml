@@ -3,12 +3,12 @@ entries:
   qrmanager:
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2024-04-23T13:45:56.94278769Z"
+    created: "2024-04-23T17:30:19.210155506+03:00"
     description: A Helm chart for Kubernetes
-    digest: 4772149912adce05ce566dc61e7595e4a21d3f88b394be9d718c9d5943c278e8
+    digest: 8ec79fb5504e4d3e1e7c4c1dbb19c4946128da9c9b553f6b1c073a6fa81f5101
     name: qrmanager
     type: application
     urls:
-    - https://github.com/flaxandteal/helm-qrcode/releases/download/0.1.0/qrmanager-0.1.0.tgz
+    - https://flaxandteal.github.io/helm-qrcode/qrmanager-0.1.0.tgz
     version: 0.1.0
-generated: "2024-04-23T13:45:56.94281111Z"
+generated: "2024-04-23T17:30:19.20983393+03:00"
