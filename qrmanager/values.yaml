@@ -57,6 +57,7 @@ statefulset:
 
 ingress:
   className: "nginx"
+  host: "qr.ev.openindustry.in"
   annotations:
     cert-manager.io/cluster-issuer: letsencrypt-production
     kubernetes.io/ingress.class: nginx

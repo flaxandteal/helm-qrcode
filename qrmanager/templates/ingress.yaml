@@ -9,6 +9,7 @@ metadata:
 spec:
   # ingressClassName: {{ .Values.ingress.className}}
   rules:
+  - host: {{ .Values.ingress.host}}
   - http:
       paths:
       {{- range .Values.ingress.paths }}
@@ -20,3 +21,7 @@ spec:
             port:
               number: {{ .backend.service.port.number }}
       {{- end }}
+  tls:
+  - hosts:
+    - {{ .Values.ingress.host }}
+    secretName: {{ .Values.deployment.name }}-tls
